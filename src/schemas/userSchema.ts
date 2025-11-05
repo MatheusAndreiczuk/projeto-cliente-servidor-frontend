@@ -37,3 +37,5 @@ export const createUserSchema = z.object({
     .or(z.literal(''))
     .nullish()
 });
+
+export type CreateUserSchema = z.infer<typeof createUserSchema>;

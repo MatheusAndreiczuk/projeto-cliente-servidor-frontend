@@ -7,20 +7,24 @@ import { AlertDialog } from "../../components/AlertDialog.tsx"
 import { useNavigate } from "react-router-dom"
 import { Navbar } from '../../components/Navbar.tsx'
 import { logout } from "../../utils/logout.ts"
+import { CompanySchema } from "../../schemas/companySchema.ts"
+import { CreateUserSchema } from "../../schemas/userSchema.ts"
 
-interface User {
-    username: string,
-    name: string,
-    password: string,
-    phone?: string,
-    email?: string,
-    experience?: string,
-    education?: string
-}
+// interface User {
+//     username: string,
+//     name: string,
+//     password: string,
+//     phone?: string,
+//     email?: string,
+//     experience?: string,
+//     education?: string
+// }
 
 function Profile() {
     const navigate = useNavigate()
-    let [userData, setUserData] = useState<User | null>(null)
+    let [userData, setUserData] = useState<CreateUserSchema | null>(null)
+    let [companyData, setCompanyData] = useState<CompanySchema | null>(null)
+    let [isCompany, setIsCompany] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +43,6 @@ function Profile() {
         setIsLoading(true);
 
         try{
-            // Pega token e userId atuais do localStorage
             const token = localStorage.getItem('token');
             const decodedToken = parseJwt(token);
             const userId = decodedToken?.sub;
@@ -65,13 +68,21 @@ function Profile() {
             decodedToken = parseJwt(token);
         }
         const userId = decodedToken.sub
+        const role = decodedToken.role
         console.log(userId)
+        const getRoute = role === "company" ? "/companies/" : "/users/"
 
-        const response = await api.get(`/users/${userId}`, {
+        const response = await api.get(`${getRoute}${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
+        if(role === "company"){
+            setCompanyData(response.data)
+            setIsCompany(true)
+        } else {
+            setUserData(response.data)
+            setIsCompany(false)
+        }
         console.log(response)
-        setUserData(response.data)
     }
 
     useEffect(() => {
@@ -87,15 +98,27 @@ function Profile() {
                         <>
                             <fieldset className="p-10 border rounded-md border-black">
                                 <legend className="px-3 text-lg">
-                                    Olá {userData?.username}
+                                    {isCompany ? 'Dados da Empresa' : `Olá, ${userData?.name}`}
                                 </legend>
                                 <div className="flex flex-col gap-5">
-                                    <p>Username: {userData?.username}</p>
+                                { !isCompany ? (
+                                    <><p>Username: {userData?.username}</p>
                                     <p>Name: {userData?.name}</p>
                                     <p>Email: {userData?.email || 'Não informado'}</p>
                                     <p>Phone: {userData?.phone || 'Não informado'}</p>
                                     <p>Education: {userData?.education || 'Não informado'}</p>
-                                    <p>Experience: {userData?.experience || 'Não informado'}</p>
+                                    <p>Experience: {userData?.experience || 'Não informado'}</p></>
+                                    
+                                ) : (
+                                    <>
+                                        <p>Nome da empresa: {companyData?.name}</p>
+                                        <p>Ramo de atuação: {companyData?.business}</p>
+                                        <p>Username: {companyData?.username}</p>
+                                        <p>Email: {companyData?.email}</p>
+                                        <p>Telefone: {companyData?.phone}</p>
+                                        <p>Endereço: {companyData?.street}, {companyData?.number} - {companyData?.city} - {companyData?.state}</p>
+                                    </>
+                                )}
                                 </div>
                             </fieldset>
                             <div className="flex flex-row gap-5 justify-end mt-5">
