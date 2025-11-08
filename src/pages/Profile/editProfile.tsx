@@ -1,12 +1,15 @@
 import { createUserSchema } from '../../schemas/userSchema.ts'
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '../../services/axios.js';
 import { useEditingProfileStore } from '../../store/editing.ts';
 import { parseJwt } from '../../utils/parseJwt.js';
-import { CompanySchema, companySchema } from '../../schemas/companySchema.ts';
+import { CompanySchema, companySchema, validStates } from '../../schemas/companySchema.ts';
 import { useEffect, useState } from 'react';
+import { Input } from '../../components/Input.tsx';
+import Select from 'react-select';
+import { Button } from '../../components/Button.tsx';
 
 type userSchema = z.infer<typeof createUserSchema>
 
@@ -26,7 +29,7 @@ export function EditUserData({ refetchUserData, ...userData }: SaveUserDataProps
 
     const currentSchema = isCompany ? companySchema : createUserSchema;
 
-    const { register, handleSubmit, formState: { errors } } = useForm<userSchema | CompanySchema>({
+    const { register, handleSubmit, formState: { errors }, control } = useForm<userSchema | CompanySchema>({
         resolver: zodResolver(currentSchema),
         defaultValues: userData
     });
@@ -62,129 +65,117 @@ export function EditUserData({ refetchUserData, ...userData }: SaveUserDataProps
 
     return (
         <form onSubmit={handleSubmit(editUserData)}>
-            <fieldset className="p-10 border rounded-md border-black">
-                <div className="flex flex-col gap-5">
+            <fieldset className="px-6 py-3 border rounded-md border-black">
+                <legend className='px-2 text-xl'>{isCompany ? 'Editar Dados da Empresa' : 'Editar Dados Pessoais'}</legend>
+                <div className="flex flex-col gap-2">
                     {!isCompany && (
                         <>
-                            <label>
-                                Name:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('name')} />
-                            </label>
-                            {errors.name && <span className='text-red-600'>{errors.name.message}</span>}
+                            <span>
+                                <Input label='Name' required type="text" placeholder='Digite a razão social da empresa' {...register('name')} />
+                                {errors.name && <span className='text-red-600'>{(errors.name as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Username:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('username')} />
-                            </label>
-                            {errors.username && <span className='text-red-600'>{errors.username.message}</span>}
+                            <span>
+                                <Input label='Password' required type="password" placeholder='Digite a senha' {...register('password')} />
+                                {errors.password && <span className='text-red-600'>{(errors.password as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Password:
-                                <input type="password" className="ml-2 border rounded-md p-2" {...register('password')} />
-                            </label>
-                            {errors.password && <span className='text-red-600'>{errors.password.message}</span>}
+                            <span>
+                                <Input label='Email' required type="email" placeholder='Digite o email' {...register('email')} />
+                                {errors.email && <span className='text-red-600'>{(errors.email as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Email:
-                                <input type="email" className="ml-2 border rounded-md p-1" {...register('email')} />
-                            </label>
-                            {errors.email && <span className='text-red-600'>{errors.email.message}</span>}
+                            <span>
+                                <Input label='Phone' required type="text" placeholder='Digite o telefone' {...register('phone')} />
+                                {errors.phone && <span className='text-red-600'>{(errors.phone as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Phone:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('phone')} />
-                            </label>
-                            {errors.phone && <span className='text-red-600'>{errors.phone.message}</span>}
+                            <span>
+                                <Input label='Education' required istextarea type="text" placeholder='Digite a formação' {...register('education')} />
+                                {(errors as any).education && <span className='text-red-600'>{((errors as any).education as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Education:
-                                <textarea className="ml-2 border rounded-md p-2" {...register('education')} />
-                            </label>
-                            {(errors as any).education && <span className='text-red-600'>{(errors as any).education.message}</span>}
-
-                            <label>
-                                Experience:
-                                <textarea className="ml-2 border rounded-md p-2" {...register('experience')} />
-                            </label>
-                            {(errors as any).experience && <span className='text-red-600'>{(errors as any).experience.message}</span>}
+                            <span>
+                                <Input label='Experience' required istextarea type="text" placeholder='Digite a experiência' {...register('experience')} />
+                                {(errors as any).experience && <span className='text-red-600'>{((errors as any).experience as any)?.message}</span>}
+                            </span>
                         </>
                     )}
 
                     {isCompany && (
                         <>
-                            <label>
-                                Name:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('name')} />
-                            </label>
-                            {errors.name && <span className='text-red-600'>{errors.name.message}</span>}
+                            <span>
+                                <Input label='Name' required type="text" placeholder='Digite a razão social da empresa' {...register('name')} />
+                                {errors.name && <span className='text-red-600'>{(errors.name as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Username:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('username')} />
-                            </label>
-                            {errors.username && <span className='text-red-600'>{errors.username.message}</span>}
+                            <span>
+                                <Input label='Password' required type="password" placeholder='Digite uma senha' {...register('password')} />
+                                {errors.password && <span className='text-red-600'>{(errors.password as any)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Password:
-                                <input type="password" className="ml-2 border rounded-md p-2" {...register('password')} />
-                            </label>
-                            {errors.password && <span className='text-red-600'>{errors.password.message}</span>}
+                            <div className='flex flex-row gap-3 w-full'>
+                                <span className='flex-2'>
+                                    <Input className="w-full" label='Business' required type="text" placeholder='Digite o ramo da empresa' {...register('business')} />
+                                    {(errors as any).business && <span className='text-red-600'>{((errors as any).business)?.message}</span>}
+                                </span>
+                                <span className='flex-1'>
+                                    <Input className="w-full" label='Telefone' required type="text" placeholder='Ex.:42999887766' {...register('phone')} />
+                                    {(errors as any).phone && <span className='text-red-600'>{((errors as any).phone)?.message}</span>}
+                                </span>
+                            </div>
 
-                            <label>
-                                Email:
-                                <input type="email" className="ml-2 border rounded-md p-1" {...register('email')} />
-                            </label>
-                            {errors.email && <span className='text-red-600'>{errors.email.message}</span>}
+                            <span>
+                                <Input label='Email' required type="text" placeholder='Digite o email institucional / empresarial' {...register('email')} />
+                                {(errors as any).email && <span className='text-red-600'>{((errors as any).email)?.message}</span>}
+                            </span>
 
-                            <label>
-                                Phone:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('phone')} />
-                            </label>
-                            {errors.phone && <span className='text-red-600'>{errors.phone.message}</span>}
-                            <label>
-                                Business:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('business')} />
-                            </label>
-                            {(errors as any).business && <span className='text-red-600'>{(errors as any).business.message}</span>}
+                            <div className='flex flex-row gap-3 w-full'>
+                                <span className='flex-3'>
+                                    <Input className="w-full" label='Cidade' required type="text" placeholder='Digite a cidade' {...register('city')} />
+                                    {(errors as any).city && <span className='text-red-600'>{((errors as any).city)?.message}</span>}
+                                </span>
+                                <span className='flex-1 flex flex-col'>
+                                    <label className='pl-1 mb-1 font-medium text-gray-700'><span className='text-red-600 pr-1'>*</span>Estado</label>
+                                    <Controller
+                                        name="state"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select<{ value: string; label: string }>
+                                                options={validStates.map((state) => ({ value: state, label: state }))}
+                                                placeholder="Estado"
+                                                value={field.value ? { value: String(field.value), label: String(field.value) } : null}
+                                                onChange={(option) => field.onChange(option ? option.value : null)}
+                                                className="w-full"
+                                                styles={{
+                                                    control: (base) => ({ ...base, minHeight: 41, backgroundColor: '#F9FAFB', borderColor: '#E5E5E5', borderRadius: '0.375rem' }),
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                    {(errors as any).state && <span className='text-red-600'>{((errors as any).state)?.message}</span>}
+                                </span>
+                            </div>
 
-                            <label>
-                                Street:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('street')} />
-                            </label>
-                            {(errors as any).street && <span className='text-red-600'>{(errors as any).street.message}</span>}
-
-                            <label>
-                                Number:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('number')} />
-                            </label>
-                            {(errors as any).number && <span className='text-red-600'>{(errors as any).number.message}</span>}
-
-                            <label>
-                                City:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('city')} />
-                            </label>
-                            {(errors as any).city && <span className='text-red-600'>{(errors as any).city.message}</span>}
-
-                            <label>
-                                State:
-                                <input type="text" className="ml-2 border rounded-md p-2" {...register('state')} />
-                            </label>
-                            {(errors as any).state && <span className='text-red-600'>{(errors as any).state.message}</span>}
+                            <div className='flex flex-row gap-3 w-full mb-2'>
+                                <span className='flex-3'>
+                                    <Input className="w-full" label='Rua / avenida' required type="text" placeholder='Digite a rua / avenida' {...register('street')} />
+                                    {(errors as any).street && <span className='text-red-600'>{((errors as any).street)?.message}</span>}
+                                </span>
+                                <span className='flex-1'>
+                                    <Input className="w-full" label='Número' required type="text" placeholder='Número' {...register('number')} />
+                                    {(errors as any).number && <span className='text-red-600'>{((errors as any).number)?.message}</span>}
+                                </span>
+                            </div>
                         </>
                     )}
                 </div>
             </fieldset>
-            <div className="flex flex-row justify-end gap-5 mt-5">
-                <button type='submit'
-                    className="p-3 bg-green-400 rounded-md font-semibold cursor-pointer"
-                >
-                    Salvar
-                </button>
-                <button type='button' onClick={() => falseEditingProfile()}
-                    className="p-3 bg-red-400 rounded-md font-semibold cursor-pointer"
-                >
+            <div className="flex flex-row justify-end gap-5">
+                  <Button type="submit" color="blue"> Salvar alterações </Button>
+                <Button type='button' onClick={() => falseEditingProfile()} color="red">
                     Cancelar
-                </button>
+                </Button>
             </div>
         </form>
     )

@@ -9,6 +9,7 @@ import { Navbar } from '../../components/Navbar.tsx'
 import { logout } from "../../utils/logout.ts"
 import { CompanySchema } from "../../schemas/companySchema.ts"
 import { CreateUserSchema } from "../../schemas/userSchema.ts"
+import { Button } from "../../components/Button.tsx"
 
 // interface User {
 //     username: string,
@@ -46,13 +47,15 @@ function Profile() {
             const token = localStorage.getItem('token');
             const decodedToken = parseJwt(token);
             const userId = decodedToken?.sub;
-            
-            await api.delete(`/users/${userId}`, 
+            const role = decodedToken?.role;
+            const getRoute = role === "company" ? "companies" : "users";
+
+            await api.delete(`/${getRoute}/${userId}`, 
                 {
                     headers: {'Authorization': `Bearer ${token}`}
                 }
             )
-            await logout()
+            localStorage.removeItem('token');
             navigate('/')
         } catch(error) {
             console.error('Erro ao excluir perfil:', error);
@@ -92,11 +95,11 @@ function Profile() {
     return (
         <>
             <Navbar />
-            <div className="flex items-center mt-20 flex-col min-h-screen">
-                <div className="w-lg p-10 rounded-md shadow-lg border border-gray-300">
+            <div className="flex items-center mt-10 flex-col min-h-screen">
+                <div className="w-lg p-8 rounded-md shadow-lg border border-gray-300">
                     {!editingProfile ? (
                         <>
-                            <fieldset className="p-10 border rounded-md border-black">
+                            <fieldset className="p-7 border rounded-md border-black">
                                 <legend className="px-3 text-lg">
                                     {isCompany ? 'Dados da Empresa' : `Olá, ${userData?.name}`}
                                 </legend>
@@ -121,17 +124,10 @@ function Profile() {
                                 )}
                                 </div>
                             </fieldset>
-                            <div className="flex flex-row gap-5 justify-end mt-5">
-                                <button
-                                    className="p-3 bg-blue-400 rounded-md font-semibold cursor-pointer"
-                                    onClick={() => trueEditingProfile()}
-                                >Editar perfil
-                                </button>
+                            <div className="flex flex-row gap-5 justify-end">
+                                <Button onClick={trueEditingProfile} color="blue"> Editar perfil </Button>
 
-                                <button 
-                                    className="p-3 bg-red-400 rounded-md font-semibold cursor-pointer"
-                                     onClick={handleOpenDialog}
-                                >Excluir perfil</button>
+                                <Button onClick={handleOpenDialog} color="red"> Excluir perfil </Button>
 
                                 <AlertDialog
                                     open={isDialogOpen}
