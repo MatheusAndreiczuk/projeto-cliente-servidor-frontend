@@ -9,6 +9,7 @@ import { Navbar } from '../../components/Navbar.js'
 import { CompanySchema } from "../../schemas/companySchema.js"
 import { CreateUserSchema } from "../../schemas/userSchema.js"
 import { Button } from "../../components/Button.js"
+import { useAuth } from "../../context/AuthContext.js"
 
 // interface User {
 //     username: string,
@@ -22,6 +23,10 @@ import { Button } from "../../components/Button.js"
 
 function Profile() {
     const navigate = useNavigate()
+    const { token, decodedToken } = useAuth();
+    const userId = decodedToken?.sub;
+    const role = decodedToken?.role;
+    const getRoute = role === "company" ? "/companies/" : "/users/"
     let [userData, setUserData] = useState<CreateUserSchema | null>(null)
     let [companyData, setCompanyData] = useState<CompanySchema | null>(null)
     let [isCompany, setIsCompany] = useState(false)
@@ -41,50 +46,32 @@ function Profile() {
 
     const handleConfirmDelete = async () => {
         setIsLoading(true);
-
-        try{
-            const token = localStorage.getItem('token');
-            const decodedToken = parseJwt(token);
-            const userId = decodedToken?.sub;
-            const role = decodedToken?.role;
-            const getRoute = role === "company" ? "companies" : "users";
-
-            await api.delete(`/${getRoute}/${userId}`, 
+        try {
+            await api.delete(`/${getRoute}/${userId}`,
                 {
-                    headers: {'Authorization': `Bearer ${token}`}
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }
             )
             localStorage.removeItem('token');
             navigate('/')
-        } catch(error) {
+        } catch (error) {
             console.error('Erro ao excluir perfil:', error);
-        } finally{
+        } finally {
             setIsLoading(false);
         }
     }
 
     const fetchUserData = async () => {
-        let token = localStorage.getItem('token');
-        let decodedToken
-        if (token) {
-            decodedToken = parseJwt(token);
-        }
-        const userId = decodedToken.sub
-        const role = decodedToken.role
-        console.log(userId)
-        const getRoute = role === "company" ? "/companies/" : "/users/"
-
         const response = await api.get(`${getRoute}${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
-        if(role === "company"){
+        if (role === "company") {
             setCompanyData(response.data)
             setIsCompany(true)
         } else {
             setUserData(response.data)
             setIsCompany(false)
         }
-        console.log(response)
     }
 
     useEffect(() => {
@@ -103,24 +90,24 @@ function Profile() {
                                     {isCompany ? 'Dados da Empresa' : `Olá, ${userData?.name}`}
                                 </legend>
                                 <div className="flex flex-col gap-5">
-                                { !isCompany ? (
-                                    <><p>Username: {userData?.username}</p>
-                                    <p>Name: {userData?.name}</p>
-                                    <p>Email: {userData?.email || 'Não informado'}</p>
-                                    <p>Phone: {userData?.phone || 'Não informado'}</p>
-                                    <p>Education: {userData?.education || 'Não informado'}</p>
-                                    <p>Experience: {userData?.experience || 'Não informado'}</p></>
-                                    
-                                ) : (
-                                    <>
-                                        <p>Nome da empresa: {companyData?.name}</p>
-                                        <p>Ramo de atuação: {companyData?.business}</p>
-                                        <p>Username: {companyData?.username}</p>
-                                        <p>Email: {companyData?.email}</p>
-                                        <p>Telefone: {companyData?.phone}</p>
-                                        <p>Endereço: {companyData?.street}, {companyData?.number} - {companyData?.city} - {companyData?.state}</p>
-                                    </>
-                                )}
+                                    {!isCompany ? (
+                                        <><p>Username: {userData?.username}</p>
+                                            <p>Name: {userData?.name}</p>
+                                            <p>Email: {userData?.email || 'Não informado'}</p>
+                                            <p>Phone: {userData?.phone || 'Não informado'}</p>
+                                            <p>Education: {userData?.education || 'Não informado'}</p>
+                                            <p>Experience: {userData?.experience || 'Não informado'}</p></>
+
+                                    ) : (
+                                        <>
+                                            <p>Nome da empresa: {companyData?.name}</p>
+                                            <p>Ramo de atuação: {companyData?.business}</p>
+                                            <p>Username: {companyData?.username}</p>
+                                            <p>Email: {companyData?.email}</p>
+                                            <p>Telefone: {companyData?.phone}</p>
+                                            <p>Endereço: {companyData?.street}, {companyData?.number} - {companyData?.city} - {companyData?.state}</p>
+                                        </>
+                                    )}
                                 </div>
                             </fieldset>
                             <div className="flex flex-row gap-5 justify-end">

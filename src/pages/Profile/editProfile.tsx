@@ -11,6 +11,7 @@ import { Input } from '../../components/Input.js';
 import Select from 'react-select';
 import { Button } from '../../components/Button.js';
 import React from "react";
+import { useAuth } from '../../context/AuthContext.js';
 
 type userSchema = z.infer<typeof createUserSchema>
 
@@ -21,12 +22,11 @@ interface SaveUserDataProps extends userSchema {
 export function EditUserData({ refetchUserData, ...userData }: SaveUserDataProps) {
     const falseEditingProfile = useEditingProfileStore((state) => state.falseEditingProfile);
     const [isCompany, setIsCompany] = useState(false);
+    const { decodedToken, token } = useAuth();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const decodedToken = parseJwt(token);
         setIsCompany(decodedToken?.role === 'company');
-    }, []);
+    }, [decodedToken]);
 
     const currentSchema = isCompany ? companySchema : createUserSchema;
 
@@ -38,9 +38,6 @@ export function EditUserData({ refetchUserData, ...userData }: SaveUserDataProps
     async function editUserData(data: userSchema | CompanySchema) {
         try {
             const userData = JSON.stringify(data);
-
-            const token = localStorage.getItem('token');
-            const decodedToken = parseJwt(token);
             const userId = decodedToken?.sub;
             const getRoute = isCompany ? 'companies' : 'users';
 

@@ -5,6 +5,7 @@ import { api } from '../../services/axios.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button.js'
 import { Input } from '../../components/Input.js'
+import { useAuth } from '../../context/AuthContext.js'
 import React from "react";
 
 const loginSchema = z.object({
@@ -19,15 +20,14 @@ type loginSchema = z.infer<typeof loginSchema>
 
 function Login (){
     const navigate = useNavigate()
+    const { login } = useAuth()
 
     const { register, handleSubmit, formState: {errors} } = useForm<loginSchema>({
         resolver: zodResolver(loginSchema)
     })
 
-    async function login(data: loginSchema){
-        const dataJson = JSON.stringify(data)
-        const { data:response } = await api.post('/login', dataJson)
-        localStorage.setItem('token', response.token)
+    async function loginHook(data: loginSchema){
+        await login(data);
         navigate('/home')
     }
 
@@ -35,7 +35,7 @@ function Login (){
         <div className="min-h-screen flex items-center justify-center">
             <div className="rounded-lg shadow-xl bg-gray-50 w-lg">
                 <h1 className="text-center font-bold text-2xl mt-10">Login</h1>
-                <form className="flex flex-col gap-5 p-10" onSubmit={handleSubmit(login)}>
+                <form className="flex flex-col gap-5 p-10" onSubmit={handleSubmit(loginHook)}>
                     <Input required label='Username'
                         type="text" 
                         placeholder="Digite seu username" 

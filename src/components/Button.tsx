@@ -10,7 +10,7 @@ const buttonVariants = tv({
       red: 'bg-red-500 text-white hover:bg-red-600 hover:outline-solid hover:outline-3 hover:outline-red-700',
     },
     size: {
-      sm: 'px-2 py-1 text-md',
+      sm: 'px-3 py-2 text-md mt-0 bg-transparent hover:bg-gray-200 text-blue-500 hover:text-blue-700',
       md: 'px-4 py-2',
     },
   },
