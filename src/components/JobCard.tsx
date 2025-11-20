@@ -6,6 +6,7 @@ import { MapPin, Briefcase, Banknote, Earth } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { api } from "../services/axios"
 import { useAuth } from "../context/AuthContext"
+import JobApplication from "../pages/Job/jobApplication"
 
 type JobCardProps = GetJobSchema & {
     role?: string | null
@@ -65,7 +66,7 @@ export function JobCard({ role, isView, ...props }: JobCardProps) {
                     </p>
                     {role == 'user' && isView ?
                         (
-                            <Button size="sm">Candidatar-se</Button>
+                            <Button size="sm" onClick={() => {navigate(`/jobs/application/${props.id}`)}}>Candidatar-se</Button>
                         ) : role == 'company' && isView ?
                             (
                                 <span>

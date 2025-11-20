@@ -47,11 +47,14 @@ function Home() {
         try {
             const getRoute = role === "company" 
                 ? `/companies/${userID}/jobs` 
-                : '/jobs';
+                : '/jobs/search';
             
-            const response = await api.get(getRoute, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
+            const response = await api.post(getRoute, 
+                { filters: [{}] },
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            )
             
             const jobs = mapJobsFromAPI(response.data?.items ?? response.data);
             setAllJobs(jobs);
@@ -66,14 +69,31 @@ function Home() {
 
     async function handleSearch(data: FilterData) {
         try {
-            const getRoute = role === "company" 
+            const endpoint = role === "company" 
                 ? `/companies/${userID}/jobs` 
-                : '/jobs';
+                : '/jobs/search';
             
-            const response = await api.get(getRoute, {
-                headers: { Authorization: `Bearer ${token}` },
-                params: data
-            })
+            const filters: any = {};
+            
+            if (data.title) filters.title = data.title;
+            if (data.company && role === 'user') filters.company = data.company;
+            if (data.area) filters.area = data.area;
+            if (data.state) filters.state = data.state;
+            if (data.city) filters.city = data.city;
+            
+            if (data.salary_range?.min || data.salary_range?.max) {
+                filters.salary_range = {
+                    min: data.salary_range.min || null,
+                    max: data.salary_range.max || null
+                };
+            }
+            
+            const response = await api.post(endpoint, 
+                { filters: [filters] },
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            )
             
             const jobs = mapJobsFromAPI(response.data?.items ?? response.data);
             setAllJobs(jobs);

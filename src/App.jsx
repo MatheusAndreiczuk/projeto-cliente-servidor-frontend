@@ -9,6 +9,7 @@ import ConnectionLabel from "./components/ConnectionLabel"
 import Job from './pages/Job'
 import JobForm from './pages/Job/jobForm'
 import EditJobForm from './pages/Job/editJob'
+import JobApplication from "./pages/Job/jobApplication"
 
 function App() {
 
@@ -54,6 +55,11 @@ function App() {
         </PrivateRoute>
         } />
 
+        <Route path='/jobs/application/:id' element={
+        <PrivateRoute>
+          <JobApplication />
+        </PrivateRoute>
+        } />
 
         <Route path="/connection" element={<Connection />} />
       </Routes>

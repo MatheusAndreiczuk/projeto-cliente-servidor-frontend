@@ -33,7 +33,31 @@ export const getJobSchema = z.object({
         .nullable()
 })
 
+export const jobApplicationSchema = z.object({
+    name: z.
+        string()
+        .min(3, { message: 'O nome do candidato deve ter pelo menos 3 caracteres.' })
+        .max(150, { message: 'O nome do candidato deve ter no máximo 150 caracteres.' }),
+    email: z
+        .email("Email inválido")
+        .or(z.literal(''))
+        .nullish(),
+    phone: z
+        .string()
+        .min(10, "Telefone deve ter no mínimo 10 dígitos")
+        .max(14, "Telefone deve ter no máximo 14 dígitos")
+        .or(z.literal(''))
+        .nullish(),
+    experience: z.
+        string()
+        .max(4000, { message: 'O currículo deve ter no máximo 4000 caracteres.' }),
+    education: z.
+        string()
+        .max(4000, { message: 'O nível de educação deve ter no máximo 4000 caracteres.' }),
+})
+
 export const createJobSchema = getJobSchema.omit({ id: true, company: true });
 
 export type GetJobSchema = z.infer<typeof getJobSchema>;
 export type CreateJobSchema = z.infer<typeof createJobSchema>;
+export type JobApplicationSchema = z.infer<typeof jobApplicationSchema>;
