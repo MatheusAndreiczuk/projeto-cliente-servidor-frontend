@@ -53,10 +53,9 @@ Em um ambiente de produção real, as seguintes melhorias seriam implementadas:
 ## Demonstração
 
 
-### Vídeo do YouTube
-```markdown
-[![Demonstração do Projeto](https://img.youtube.com/vi/FMQ3TQifkiE/maxresdefault.jpg)](https://youtu.be/FMQ3TQifkiE)
-```
+### Vídeo de demonstração básica do projeto
+
+https://github.com/user-attachments/assets/1ea9d4f6-875f-4a24-9ee1-787101c23ca2
 
 ---
 
@@ -310,3 +309,4 @@ Este projeto foi desenvolvido para fins acadêmicos como parte da disciplina de 
 ### Se gostou deste projeto, considere dar uma estrela!
 
 </div>
+
