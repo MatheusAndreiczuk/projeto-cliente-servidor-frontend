@@ -19,7 +19,11 @@
 
 Apesar de totalmente funcional, o projeto ainda passará por melhorias tanto na interface quanto no backend.
 
-Este projeto foi desenvolvido considerando as limitações de infraestrutura dos laboratórios da UTFPR, onde será apresentado:
+- **O projeto foi desenvolvido seguindo um protocolo de comunicação, vide arquivo nomeado e com extensão xlsx no repositório**
+
+- **Tal protocolo foi desenvolvido pela própria turma da disciplina Cliente-Servidor, não representando necessariamente um protocolo profissional de comunicação backend-frontend.**
+
+- **Este projeto foi desenvolvido considerando as limitações de infraestrutura dos laboratórios da UTFPR, onde será apresentado:**
 
 ### Restrições do Ambiente
 
