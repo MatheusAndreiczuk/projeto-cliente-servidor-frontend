@@ -48,15 +48,15 @@ function Applications() {
             <Navbar role={role} />
 
             <div className='flex-1 flex items-start justify-center pt-6 md:pt-10 overflow-auto px-4'>
-                <div className='border rounded-md p-4 md:p-6 shadow-lg w-full md:w-5/6 mb-10'>
-                    <h1 className='text-2xl font-bold mb-6'>Minhas Candidaturas</h1>
+                <div className='sm:border sm:rounded-md p-2 sm:p-6 sm:shadow-lg w-full md:w-5/6 mb-10'>
+                    <h1 className='text-2xl font-bold mb-6 sm:px-2 lg:px-5'>Minhas Candidaturas</h1>
 
                     {isLoading ? (
                         <div className='flex items-center justify-center h-64'>
                             <p className='text-lg text-gray-500'>Carregando...</p>
                         </div>
                     ) : applications.length > 0 ? (
-                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:px-2 lg:px-5'>
                             {applications.map((job) => (
                                 <div key={job.id} className='border shadow-lg rounded-lg p-4 md:p-5 bg-white flex flex-col h-full'>
                                     <div className='flex flex-col gap-3 md:gap-4 flex-1'>

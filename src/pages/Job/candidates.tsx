@@ -84,10 +84,12 @@ function Candidates() {
 
     return (
         <div className='h-screen overflow-hidden flex flex-col'>
-            <Navbar role={role} />
+            <div className='md:flex md:flex-col md:items-center md:pt-6'>
+                <Navbar role={role} />
+            </div>
 
-            <div className='flex-1 flex items-start justify-center pt-6 md:pt-10 overflow-auto px-4'>
-                <div className='border rounded-md p-4 md:p-6 shadow-lg w-full md:w-5/6 mb-10'>
+            <div className='flex-1 flex items-start justify-center pt-6 md:pt-4 overflow-auto px-4'>
+                <div className='w-full md:w-5/6 md:border md:rounded-md md:p-6 md:shadow-lg mb-10'>
                     <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6'>
                         <h1 className='text-lg md:text-2xl font-bold'>Candidatos da Vaga</h1>
                         <Button size='sm' onClick={() => navigate(`/jobs/${id}`)}>Voltar</Button>
@@ -98,12 +100,12 @@ function Candidates() {
                             <p className='text-lg text-gray-500'>Carregando candidatos...</p>
                         </div>
                     ) : candidates.length > 0 ? (
-                        <div className='space-y-6'>
+                        <div className='space-y-4 md:space-y-6'>
                             {candidates.map((candidate) => (
-                                <div key={candidate.user_id} className='border rounded-lg p-5 shadow-md bg-white'>
-                                    <div className='flex flex-col gap-4'>
+                                <div key={candidate.user_id} className='border rounded-lg p-4 md:p-5 shadow-md bg-white'>
+                                    <div className='flex flex-col gap-3 md:gap-4'>
                                         <div className='flex items-center justify-between border-b pb-3'>
-                                            <h2 className='text-xl font-semibold flex items-center gap-2'>
+                                            <h2 className='text-lg md:text-xl font-semibold flex items-center gap-2'>
                                                 <User className='w-5 h-5' />
                                                 {candidate.name}
                                             </h2>
@@ -122,19 +124,19 @@ function Candidates() {
 
                                         <div className='space-y-3'>
                                             <div>
-                                                <h3 className='font-semibold flex items-center gap-2 mb-1'>
-                                                    <GraduationCap className='w-4 h-4' />
+                                                <h3 className='text-sm md:text-base font-semibold flex items-center gap-2 mb-1'>
+                                                    <GraduationCap className='w-4 h-4 shrink-0' />
                                                     Formação Acadêmica
                                                 </h3>
-                                                <p className='text-sm text-gray-600 whitespace-pre-line pl-6'>{candidate.education}</p>
+                                                <p className='text-xs md:text-sm text-gray-600 whitespace-pre-line pl-6 wrap-break-words'>{candidate.education}</p>
                                             </div>
 
                                             <div>
-                                                <h3 className='font-semibold flex items-center gap-2 mb-1'>
-                                                    <Briefcase className='w-4 h-4' />
+                                                <h3 className='text-sm md:text-base font-semibold flex items-center gap-2 mb-1'>
+                                                    <Briefcase className='w-4 h-4 shrink-0' />
                                                     Experiência Profissional
                                                 </h3>
-                                                <p className='text-sm text-gray-600 whitespace-pre-line pl-6'>{candidate.experience}</p>
+                                                <p className='text-xs md:text-sm text-gray-600 whitespace-pre-line pl-6 wrap-break-words'>{candidate.experience}</p>
                                             </div>
                                         </div>
 
@@ -149,7 +151,7 @@ function Candidates() {
                                                         value={feedbackForm.message}
                                                         onChange={(e) => setFeedbackForm({ ...feedbackForm, message: e.target.value })}
                                                     />
-                                                    <div className='flex gap-2 justify-end'>
+                                                    <div className='flex flex-col sm:flex-row gap-2 justify-end'>
                                                         <Button 
                                                             color='red' 
                                                             size='sm'

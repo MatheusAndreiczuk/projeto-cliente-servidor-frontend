@@ -69,7 +69,7 @@ function EditJobForm() {
         <>
             <Navbar role={role} />
             <div className="mt-6 md:mt-10 flex justify-center px-4">
-                <div className="w-full max-w-4xl p-4 md:p-8 rounded-lg shadow-xl bg-gray-50">
+                <div className="w-full md:w-5/6 max-w-4xl sm:p-4 md:p-8 sm:rounded-lg sm:shadow-xl sm:bg-gray-50">
                     <form onSubmit={handleSubmit(handleEditJob)}>
                         <h1 className="text-2xl font-bold mb-4">Editar Vaga</h1>
                         <div className="flex flex-col gap-2">
@@ -82,8 +82,8 @@ function EditJobForm() {
                             />
                             {errors.title && <p className="text-red-600 text-sm">{errors.title.message}</p>}
 
-                            <div className="w-full flex gap-5">
-                                <span className="flex-3 w-full">
+                            <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-5">
+                                <span className="flex-1 sm:flex-3 w-full">
                                     <Input
                                         label="Área de atuação"
                                         type="text"
@@ -91,21 +91,23 @@ function EditJobForm() {
                                         placeholder="Digite a área de atuação"
                                         {...register('area')}
                                     />
+                                    {errors.area && <p className="text-red-600 text-sm">{errors.area.message}</p>}
                                 </span>
-                                {errors.area && <p className="text-red-600 text-sm">{errors.area.message}</p>}
-                                <span className="w-full flex-1">
+                                <span className="flex-1 w-full">
                                     <Input
                                         label="Salário"
                                         type="number"
                                         placeholder="Salário ofertado"
-                                        {...register('salary', { valueAsNumber: true })}
+                                        {...register('salary', { 
+                                            setValueAs: (v) => v === "" || v === null ? null : Number(v)
+                                        })}
                                     />
                                     {errors.salary && <p className="text-red-600 text-sm">{errors.salary.message}</p>}
                                 </span>
                             </div>
 
-                            <div className="flex w-full gap-5">
-                                <span className="w-full flex-3">
+                            <div className="flex flex-col sm:flex-row w-full gap-3 sm:gap-5">
+                                <span className="flex-1 sm:flex-3 w-full">
                                     <Input
                                         label="Localização"
                                         type="text"
@@ -113,6 +115,7 @@ function EditJobForm() {
                                         placeholder="Digite a cidade em que o candidato será lotado"
                                         {...register('city')}
                                     />
+                                    {errors.city && <p className="text-red-600 text-sm">{errors.city.message}</p>}
                                     {errors.city && <p className="text-red-600 text-sm">{errors.city.message}</p>}
                                 </span>
                                 <span className='flex-1 flex flex-col'>
@@ -123,7 +126,7 @@ function EditJobForm() {
                                         render={({ field }) => (
                                             <Select<{ value: string; label: string }>
                                                 options={validStates.map((state) => ({ value: state, label: state }))}
-                                                placeholder="Estado"
+                                                placeholder="UF"
                                                 value={field.value ? { value: String(field.value), label: String(field.value) } : null}
                                                 onChange={(option) => field.onChange(option ? option.value : null)}
                                                 className="w-full"
@@ -147,7 +150,7 @@ function EditJobForm() {
                             />
                             {errors.description && <p className="text-red-600 text-sm">{errors.description.message}</p>}
                         </div>
-                        <div className="flex justify-end gap-5">
+                        <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-5">
                             <Button type="button" color="red" onClick={() => { navigate(`/jobs/${id}`) }}>Cancelar</Button>
                             <Button type="submit">Salvar</Button>
                         </div>

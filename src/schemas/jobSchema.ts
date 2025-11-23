@@ -29,8 +29,9 @@ export const getJobSchema = z.object({
         .max(100, { message: 'O estado deve ter no máximo 100 caracteres.' }),
     salary: z.
         number()
+        .nullable()
         .optional()
-        .nullable(),
+        .or(z.literal(null)),
     feedback: z.
         string()
         .nullable()

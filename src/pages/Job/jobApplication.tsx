@@ -75,7 +75,7 @@ function JobApplication() {
         <>
             <Navbar role={role} />
             <div className="mt-6 md:mt-8 flex justify-center px-4">
-                <div className="w-full max-w-7xl p-4 md:p-6 rounded-lg shadow-xl bg-gray-50 mb-6">
+                <div className="w-full md:w-5/6 max-w-7xl sm:p-4 md:p-6 sm:rounded-lg sm:shadow-xl sm:bg-gray-50 mb-6">
                     <form onSubmit={handleSubmit(handleFormSubmit)}>
                         <h1 className="text-2xl font-bold mb-4">Enviar Candidatura</h1>
                         <div className="flex flex-col gap-2">
@@ -88,9 +88,9 @@ function JobApplication() {
                             />
                             {errors.name && <p className="text-red-600 text-sm">{errors.name.message}</p>}
 
-                            <div className='flex flex-row gap-3 w-full'>
-                                <span className='flex-3'>
-                                    <Input className="w-full" label='Email' type="text" placeholder='Digite seu melhor email (opcional)' {...register('email')} />
+                            <div className='flex flex-col sm:flex-row gap-3 w-full'>
+                                <span className='flex-1 sm:flex-3'>
+                                    <Input className="w-full" label='Email' type="text" placeholder='Digite seu email (opcional)' {...register('email')} />
                                     {(errors as any).email && <span className='text-red-600'>{((errors as any).email)?.message}</span>}
                                 </span>
                                 <span className='flex-1'>
@@ -120,7 +120,7 @@ function JobApplication() {
                             {errors.experience && <p className="text-red-600 text-sm">{errors.experience.message}</p>}
                         </div>
 
-                        <div className="flex justify-end gap-5 mt-4">
+                        <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-5 mt-4">
                             <Button
                                 type="button"
                                 color="red"

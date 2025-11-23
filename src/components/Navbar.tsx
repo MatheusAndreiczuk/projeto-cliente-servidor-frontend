@@ -25,7 +25,7 @@ export function Navbar(Props: NavbarProps) {
                             <NavLink to="/applications">Candidaturas</NavLink>
                         </li>}
                         {Props.role === "company" && <li>
-                            <NavLink to="/announce">Anunciar</NavLink>
+                            <NavLink to="/announce">Announce</NavLink>
                         </li>}
                         <li><NavLink to="/profile">Profile</NavLink></li>
                         <li><NavLink to="/" onClick={async () => await logout()}>Logout</NavLink></li>

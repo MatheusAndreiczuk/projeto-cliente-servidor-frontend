@@ -55,7 +55,7 @@ function Job() {
         <>
         <Navbar role={role}/>
             <div className="mt-10 md:mt-20 flex justify-center px-4">
-                <div className='w-full max-w-5xl'>
+                <div className='w-full md:w-5/6 max-w-5xl'>
                     {job ? (
                         <JobCard {...job} isView={true} role={role} hasApplied={hasApplied} />
                     ) : (

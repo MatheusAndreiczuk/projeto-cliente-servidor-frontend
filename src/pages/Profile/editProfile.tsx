@@ -62,13 +62,13 @@ export function EditUserData({ refetchUserData, ...userData }: SaveUserDataProps
 
     return (
         <form onSubmit={handleSubmit(editUserData)}>
-            <fieldset className="px-6 py-3 border rounded-md border-black">
-                <legend className='px-2 text-xl'>{isCompany ? 'Editar Dados da Empresa' : 'Editar Dados Pessoais'}</legend>
-                <div className="flex flex-col gap-2">
+            <fieldset className="sm:px-6 sm:py-3 sm:border sm:rounded-md sm:border-black">
+                <legend className='sm:px-2 text-md sm:text-xl'>{isCompany ? 'Editar Dados da Empresa' : 'Editar Dados Pessoais'}</legend>
+                <div className="flex flex-col gap-2 wrap-break-words">
                     {!isCompany && (
                         <>
                             <span>
-                                <Input label='Name' required type="text" placeholder='Digite a razão social da empresa' {...register('name')} />
+                                <Input label='Name' required type="text" placeholder='Digite o seu nome' {...register('name')} />
                                 {errors.name && <span className='text-red-600'>{(errors.name as any)?.message}</span>}
                             </span>
 

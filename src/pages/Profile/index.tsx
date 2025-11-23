@@ -82,14 +82,14 @@ function Profile() {
         <>
             <Navbar role={role} />
             <div className="flex items-center mt-10 flex-col min-h-screen">
-                <div className="w-lg p-8 rounded-md bg-gray-50 shadow-xl">
+                <div className="w-full wrap-break-words sm:w-lg sm:p-8 p-4 sm:rounded-md sm:bg-gray-50 sm:shadow-xl">
                     {!editingProfile ? (
                         <>
-                            <fieldset className="p-7 border rounded-md border-black">
-                                <legend className="px-3 text-lg">
+                            <fieldset className="sm:p-7 sm:border sm:rounded-md sm:border-black">
+                                <legend className="sm:px-3 text-md sm:text-lg">
                                     {isCompany ? 'Dados da Empresa' : `Olá, ${userData?.name}`}
                                 </legend>
-                                <div className="flex flex-col gap-5">
+                                <div className="flex flex-col gap-5 mt-12 sm:mt-0 wrap-break-words">
                                     {!isCompany ? (
                                         <><p>Username: {userData?.username}</p>
                                             <p>Name: {userData?.name}</p>
@@ -110,7 +110,7 @@ function Profile() {
                                     )}
                                 </div>
                             </fieldset>
-                            <div className="flex flex-row gap-5 justify-end">
+                            <div className="flex flex-col sm:flex-row gap-5 justify-end">
                                 <Button onClick={trueEditingProfile} color="blue"> Editar perfil </Button>
 
                                 <Button onClick={handleOpenDialog} color="red"> Excluir perfil </Button>
